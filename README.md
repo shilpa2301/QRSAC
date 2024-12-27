@@ -20,6 +20,7 @@ Set `--gpu -1`, your program will run on CPU.
 ### Experiments on Gym environments
 
 ### Experiments on DonkeyCar
+iframe src="https://giphy.com/embed/kPQkvnH6UcrE5LRgCa" width="480" height="278" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/kPQkvnH6UcrE5LRgCa">via GIPHY</a></p>'
 
 ### Experiments on JetRacer
 
