@@ -1,5 +1,5 @@
 # QRSAC
-Implementation of Quantile Regression Soft Actor Critic (QSAC) from "Outracing champion Gran Turismo drivers with deep reinforcement learning" by Wurman PR, Barrett S, Kawamoto K, MacGlashan J, Subramanian K, Walsh TJ, Capobianco R, Devlic A, Eckert F, Fuchs F, Gilpin L.[[Paper]]([https://arxiv.org/abs/1712.00080](https://www.nature.com/articles/s41586-021-04357-7))
+Implementation of Quantile Regression Soft Actor Critic (QSAC) from "Outracing champion Gran Turismo drivers with deep reinforcement learning" by Wurman PR, Barrett S, Kawamoto K, MacGlashan J, Subramanian K, Walsh TJ, Capobianco R, Devlic A, Eckert F, Fuchs F, Gilpin L. [[Paper]](https://www.nature.com/articles/s41586-021-04357-7)
 
 This repository is based on [RLkit](https://github.com/vitchyr/rlkit) and [DSAC](https://github.com/xtma/dsac), two popular reinforcement learning frameworks implemented in PyTorch.
 The core algorithm of QRSAC is in `rlkit/torch/qrsac/`
