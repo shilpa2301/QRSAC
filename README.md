@@ -5,6 +5,7 @@ The core algorithm of QRSAC is in `rlkit/torch/qrsac/`
 
 ## Requirements
 - python 3.10+
+- All dependencies are available in requirements.txt and environment.yml
 
 ## Usage
 You can write your experiment settings in configs/your_config.yaml and run with 
@@ -12,6 +13,15 @@ You can write your experiment settings in configs/your_config.yaml and run with
 python qrsac.py --config your_config.yaml --gpu 0 --seed 0
 ```
 Set `--gpu -1`, your program will run on CPU.
+
+## Experiments
+3 different experiments are conducted to validate the working of the QRSAC algorithm - on gym environments, on an advanced environment (donkercar) and on an real-world scaled RC car (Jetracer).
+
+### Experiments on Gym environments
+
+### Experiments on DonkeyCar
+
+### Experiments on JetRacer
 
 
 
