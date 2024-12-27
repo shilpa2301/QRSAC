@@ -25,5 +25,7 @@ Set `--gpu -1`, your program will run on CPU.
 
 ### Experiments on JetRacer
 
+<img src='./readme_media/Jetracer.gif'>
+
 
 
