@@ -1,6 +1,6 @@
 # QRSAC
 Implementation of Quantile Regression Soft Actor Critic (QSAC).
-This repository is based on [RLkit](https://github.com/vitchyr/rlkit) and [DSAC][https://github.com/xtma/dsac], two popular reinforcement learning frameworks implemented in PyTorch.
+This repository is based on [RLkit](https://github.com/vitchyr/rlkit) and [DSAC](https://github.com/xtma/dsac), two popular reinforcement learning frameworks implemented in PyTorch.
 The core algorithm of QRSAC is in `rlkit/torch/qrsac/`
 
 ## Requirements
