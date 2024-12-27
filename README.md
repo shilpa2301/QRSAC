@@ -18,10 +18,6 @@ Set `--gpu -1`, your program will run on CPU.
 ## Experiments
 2 different experiments are conducted to validate the working of the QRSAC algorithm - on an donkercar simulator and on an real-world scaled RC car (Jetracer).
 
-%### Experiments on Gym environments
-
-%<img src='./readme_media/gym_plots.png'>
-
 ### Experiments on DonkeyCar
 
 <img src='./readme_media/DonkeyCar.gif'>
