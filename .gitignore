@@ -12,7 +12,6 @@ dsac/
 environment/
 eval_models/
 .vscode/
-qrsac/
 videos/
 wrappers/
 dsac.py
