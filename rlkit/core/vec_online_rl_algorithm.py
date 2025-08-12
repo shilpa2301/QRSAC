@@ -49,6 +49,7 @@ class VecOnlineRLAlgorithm(BaseRLAlgorithm, metaclass=abc.ABCMeta):
     def _train(self):
         self.training_mode(False)
         if self.min_num_steps_before_training > 0:
+            print(self.min_num_steps_before_training)
            
             print("exploring")
             init_expl_paths = self.expl_data_collector.collect_new_steps(

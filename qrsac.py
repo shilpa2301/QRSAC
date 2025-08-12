@@ -16,6 +16,21 @@ from rlkit.torch.sac.policies import MakeDeterministic, TanhGaussianPolicy
 from rlkit.torch.torch_rl_algorithm import TorchVecOnlineRLAlgorithm
 
 from gym.envs.registration import register
+# from gym.envs.registration import register
+
+from rlkit.envs.gym_donkeycar.envs.donkey_env import (
+    AvcSparkfunEnv,
+    CircuitLaunchEnv,
+    GeneratedRoadsEnv,
+    GeneratedTrackEnv,
+    MiniMonacoEnv,
+    MountainTrackEnv,
+    RoboRacingLeagueTrackEnv,
+    ThunderhillTrackEnv,
+    WarehouseEnv,
+    WarrenTrackEnv,
+    WaveshareEnv,
+)
 
 torch.set_num_threads(4)
 torch.set_num_interop_threads(4)
@@ -43,37 +58,37 @@ def experiment(variant):
         input_size=obs_dim + action_dim,
         output_size=1,
         num_quantiles=num_quantiles,
-        hidden_sizes=[M, M, M, M, M],
+        hidden_sizes=[M, M, M],#, M, M],
     )
     zf2 = QuantileMlp(
         input_size=obs_dim + action_dim,
         output_size=1,
         num_quantiles=num_quantiles,
-        hidden_sizes=[M, M, M, M, M],
+        hidden_sizes=[M, M, M],#, M, M],
     )
     target_zf1 = QuantileMlp(
         input_size=obs_dim + action_dim,
         output_size=1,
         num_quantiles=num_quantiles,
-        hidden_sizes=[M, M, M, M, M],
+        hidden_sizes=[M, M, M],# M, M],
     )
     target_zf2 = QuantileMlp(
         input_size=obs_dim + action_dim,
         output_size=1,
         num_quantiles=num_quantiles,
-        hidden_sizes=[M, M, M, M, M],
+        hidden_sizes=[M, M, M],#, M, M],
     )
     policy = TanhGaussianPolicy(
         obs_dim=obs_dim,
         action_dim=action_dim,
-        hidden_sizes=[M, M, M, M, M],
+        hidden_sizes=[M, M, M],#, M, M],
         dropout_probability = 0.1,
     )
     eval_policy = MakeDeterministic(policy)
     target_policy = TanhGaussianPolicy(
         obs_dim=obs_dim,
         action_dim=action_dim,
-        hidden_sizes=[M, M, M, M, M],
+        hidden_sizes=[M, M, M],#, M, M],
         dropout_probability=0.1,
     )
     # fraction proposal network
@@ -143,6 +158,9 @@ if __name__ == "__main__":
     if args.gpu >= 0:
         ptu.set_gpu_mode(True, args.gpu)
     set_seed(args.seed)
+
+    #shilpa
+    register(id="donkey-generated-roads-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:GeneratedRoadsEnv")
 
     #JETRACER
     # ctrl = XboxController()

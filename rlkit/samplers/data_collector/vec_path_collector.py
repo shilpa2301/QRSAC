@@ -83,7 +83,8 @@ class VecMdpPathCollector(DataCollector):
             # actions = np.squeeze(actions, axis=1)
 
             #qrsac_adapt
-            # actions = np.squeeze(actions, axis=0)
+            actions = np.squeeze(actions, axis=0)
+            # actions = np.squeeze(actions)
             next_obs, rewards, terminals, env_infos = self._env.step(actions)
 
             if self._render:

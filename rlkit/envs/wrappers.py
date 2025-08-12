@@ -213,11 +213,11 @@ class CustomInfoEnv(Wrapper):
                            #'steer': info['steer']
                            }
             #donkeycar
-            # custom_info = {'failed': reward <= -100,
-            #                'cte': info['cte'],
-            #                'vel': info['vel'], #vel_x, vel_y, vel_z
-            #                'angle': info['car'] #roll, pitch, yaw
-            #                }
+            custom_info = {'failed': reward <= -100,
+                           'cte': info['cte'],
+                           'vel': info['vel'], #vel_x, vel_y, vel_z
+                           'angle': info['car'] #roll, pitch, yaw
+                           }
 
 
         return state, reward, done, custom_info

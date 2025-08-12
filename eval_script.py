@@ -3,26 +3,49 @@ import torch
 from rlkit.torch.sac.policies import MakeDeterministic, TanhGaussianPolicy
 import gym
 from rlkit.envs import make_env
-# from ae.autoencoder import load_ae
+from ae.autoencoder import load_ae
 import numpy as np
 
+from gym.envs.registration import register
+# from gym.envs.registration import register
 
-with open('./eval_models/params.pkl', 'rb') as f:
+from rlkit.envs.gym_donkeycar.envs.donkey_env import (
+    AvcSparkfunEnv,
+    CircuitLaunchEnv,
+    GeneratedRoadsEnv,
+    GeneratedTrackEnv,
+    MiniMonacoEnv,
+    MountainTrackEnv,
+    RoboRacingLeagueTrackEnv,
+    ThunderhillTrackEnv,
+    WarehouseEnv,
+    WarrenTrackEnv,
+    WaveshareEnv,
+)
+
+
+
+with open('/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/qrsac_donkey-generated-roads_normal-iqn-neutral_2025_08_12_14_45_30_0000--s-0/itr_30.pkl', 'rb') as f:
     state_dict = torch.load(f)
 
 target_policy = TanhGaussianPolicy(
-            obs_dim=111,
-            action_dim=8,
-            hidden_sizes=[256, 256, 256, 256, 256],
+            obs_dim=32,
+            action_dim=2,
+            hidden_sizes=[256, 256, 256],#, 256, 256],
             dropout_probability=0.1,
             )
 
-target_policy.load_state_dict(state_dict["trainer/policy"])
+target_policy.load_state_dict(state_dict["trainer/target_policy"])
+target_policy.eval()
 #donkeycar
-# ae_path = "/home/pipelines/pipeline2/aae-train-donkeycar/logs/ae-32_1704492161_best.pkl"
-# ae = load_ae(ae_path)
-env = make_env('Ant-v2')
-env.seed(0)
+ae_path = "/home/smukh039/work/QRSAC/ae/model_pkls/ae-32_1704492161_best.pkl"
+ae = load_ae(ae_path)
+
+#shilpa
+register(id="donkey-generated-roads-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:GeneratedRoadsEnv")
+
+env = make_env('donkey-generated-roads-v0')
+env.seed(100)
 
 obs=env.reset()
 #donkeycar

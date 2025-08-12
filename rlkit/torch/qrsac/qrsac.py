@@ -61,7 +61,7 @@ class QRSACTrainer(TorchTrainer):
             risk_schedule_timesteps=1,
             optimizer_class=optim.Adam,
             soft_target_tau=5e-3,
-            target_update_period=1,
+            target_update_period=5,
             clip_norm=0.,
             use_automatic_entropy_tuning=False,
             target_entropy=None,

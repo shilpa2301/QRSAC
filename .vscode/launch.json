@@ -1,0 +1,33 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: QRSAC",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/qrsac.py",
+            // "program": "${workspaceFolder}/eval_script.py",
+            "args": [
+                //cobevt
+                "--config", "${workspaceFolder}/configs/qrsac-normal-iqn-neutral/donkeycar.yaml",
+                "--gpu", "0",
+                "--seed", "0"
+            ],
+            "cwd": "${workspaceFolder}",
+            "env": {
+              "PYTHONPATH": "${workspaceFolder}"
+            },
+            "python": "/home/smukh039/anaconda3/envs/qrsac_env/bin/python",
+            "python": "${command:python.interpreterPath}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "xdebugSettings": {
+                "max_depth": -1
+            }
+            
+        }
+    ]
+}
