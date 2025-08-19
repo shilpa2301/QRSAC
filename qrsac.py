@@ -84,13 +84,19 @@ def experiment(variant):
         hidden_sizes=[M, M, M],#, M, M],
         dropout_probability = 0.1,
     )
-    eval_policy = MakeDeterministic(policy)
+
     target_policy = TanhGaussianPolicy(
         obs_dim=obs_dim,
         action_dim=action_dim,
         hidden_sizes=[M, M, M],#, M, M],
         dropout_probability=0.1,
     )
+
+    #shilpa self_certainty reward
+    eval_policy = MakeDeterministic(policy)
+    # eval_policy = target_policy
+
+    
     # fraction proposal network
     fp = target_fp = None
     if variant['trainer_kwargs'].get('tau_type') == 'fqf':
@@ -109,6 +115,8 @@ def experiment(variant):
     eval_path_collector = VecMdpPathCollector(
         eval_env,
         eval_policy,
+        #shilpa self_certainty reward
+        # device=ptu.device,
     )
     expl_path_collector = VecMdpStepCollector(
         expl_env,

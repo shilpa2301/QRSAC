@@ -43,7 +43,7 @@ def get_generic_path_information(paths, stat_prefix=''):
             for k in all_env_infos[0].keys():
                 # final_ks = np.array([info[k][-1] for info in all_env_infos])
                 # first_ks = np.array([info[k][0] for info in all_env_infos])
-                # all_ks = np.concatenate([info[k] for info in all_env_infos])
+                all_ks = np.concatenate([info[k] for info in all_env_infos])
 
                 # statistics.update(create_stats_ordered_dict(
                 #     stat_prefix + k,
@@ -69,7 +69,7 @@ def get_generic_path_information(paths, stat_prefix=''):
                 ))
                 statistics.update(create_stats_ordered_dict(
                     stat_prefix + k,
-                    average_ks,
+                    all_ks,
                     stat_prefix='{}/average/'.format(info_key),
                 ))
 

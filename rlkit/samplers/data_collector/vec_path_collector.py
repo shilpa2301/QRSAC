@@ -12,6 +12,9 @@ from rlkit.samplers.data_collector.base import DataCollector
 import os
 import pandas as pd
 
+#shilpa self_certainty reward
+import torch
+
 class VecMdpPathCollector(DataCollector):
 
     def __init__(
@@ -21,6 +24,8 @@ class VecMdpPathCollector(DataCollector):
             max_num_epoch_paths_saved=None,
             render=False,
             render_kwargs=None,
+            #shilpa self_certainty reward
+            # device = None
     ):
         if render_kwargs is None:
             render_kwargs = {}
@@ -38,6 +43,7 @@ class VecMdpPathCollector(DataCollector):
         #donkeycar
         # ae_path = "/home/pipelines/pipeline2/aae-train-donkeycar/logs/ae-32_1704492161_best.pkl"
         # self.ae = load_ae(ae_path)
+        # self.device = device
 
     def get_epoch_paths(self):
         return self._epoch_paths
@@ -78,14 +84,26 @@ class VecMdpPathCollector(DataCollector):
         while num_paths_collected < num_paths:
 
             actions = self._policy.get_actions(self._obs)
-
             #JETRACER
             # actions = np.squeeze(actions, axis=1)
-
             #qrsac_adapt
             actions = np.squeeze(actions, axis=0)
-            # actions = np.squeeze(actions)
             next_obs, rewards, terminals, env_infos = self._env.step(actions)
+
+            # #shilpa rlif todo
+            # actions,policy_mean, policy_log_std, log_pi, *_ = self._policy(
+            #                     torch.tensor(self._obs).squeeze(0).to(self.device),
+            #                     reparameterize=True,
+            #                     return_log_prob=True,
+            #                 )
+            # actions = actions.cpu().detach().numpy().reshape(1, 2).astype(np.float32)            
+            
+            # #JETRACER
+            # # actions = np.squeeze(actions, axis=1)
+            
+            # next_obs, rewards, terminals, env_infos = self._env.step(actions)
+            # self_certainty = log_pi
+            # rewards =rewards + self_certainty.squeeze(0).cpu().detach().numpy().astype(np.float64)
 
             if self._render:
                 self._env.render(**self._render_kwargs)

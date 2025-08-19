@@ -65,8 +65,8 @@ class DonkeyEnv(gym.Env):
     ACTION_NAMES: List[str] = ["steer", "throttle"]
     STEER_LIMIT_LEFT: float = -1.0 #-0.5 # 0.5 works till 04-0.6 th , for th 0.8-> 1.0
     STEER_LIMIT_RIGHT: float = 1.0 #0.5
-    THROTTLE_MIN: float = 0.1 #0.2 #0.2 #0.0
-    THROTTLE_MAX: float = 0.5 #0.6#1.0 #0.6
+    THROTTLE_MIN: float = 0.2 #0.2 #0.2 #0.0
+    THROTTLE_MAX: float = 0.6 #0.6#1.0 #0.6
     VAL_PER_PIXEL: int = 255
 
 
