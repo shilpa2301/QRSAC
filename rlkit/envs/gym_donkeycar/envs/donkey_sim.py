@@ -25,6 +25,11 @@ import cv2
 from ae.autoencoder import Autoencoder
 from ae.autoencoder import load_ae
 
+#shilpa dump image
+from PIL import Image
+from datetime import datetime
+import os
+
 logger = logging.getLogger(__name__)
 
 
@@ -171,9 +176,11 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.last_accel_z = 0.0
         self.last_cte = 0.0
         self.last_yaw = 0.0
+        #shilpa distance
+        self.last_vel = 0.0
 
         #shilpa
-        ae_path= "/home/smukh039/work/QRSAC/ae/model_pkls/icra_generated_roads_ae_model.pkl"
+        ae_path= "/home/smukh039/work/QRSAC/ae/model_pkls/icra_donkey_track_ae_model.pkl" #icra_generated_roads_ae_model.pkl"
         self.ae = load_ae(ae_path)
 
     def on_connect(self, client: SimClient) -> None:
@@ -420,6 +427,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.pitch = 0.0
         self.yaw = 0.0
 
+        #shilpa dist
+        self.last_vel = 0.0
+
     def get_sensor_size(self) -> Tuple[int, int, int]:
         return self.camera_img_size
 
@@ -433,6 +443,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.last_accel_z = self.accel_z
         self.last_yaw = self.yaw
         self.last_cte = self.cte
+        #shilpa dist
+        self.last_vel = np.sqrt(self.vel_x**2 + self.vel_y**2 + self.vel_z**2)
+
         self.last_throttle = action[1]
         self.last_steer = action[0]
 
@@ -512,6 +525,45 @@ class DonkeyUnitySimHandler(IMesgHandler):
         #print("value of done in observe = ", str(done))
         reward = self.calc_reward(done)
 
+        #shilpa dump image
+        # try:
+        #     # Ensure the directory exists to save images
+        #     output_dir = "/home/smukh039/work/pipelines/pipeline2/aae-train-donkeycar/logs/generated_track"
+        #     if not os.path.exists(output_dir):
+        #         os.makedirs(output_dir)
+
+        #     # Generate a unique filename (e.g., using timestamp or a counter)
+        #     # You can modify this to use a counter or episode/step info if available
+            
+        #     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        #     filename = os.path.join(output_dir, f"observation_{timestamp}.jpg")
+
+        #     # Verify the shape of the observation
+        #     if observation.shape != (120, 160, 3):
+        #         print(f"Unexpected observation shape: {observation.shape}. Expected (120, 160, 3).")
+        #     else:
+        #         # Check if the array values are in range [0, 1] and convert to [0, 255] if necessary
+        #         if observation.dtype != np.uint8:
+        #             if observation.max() <= 1.0 and observation.min() >= 0.0:
+        #                 observation = (observation * 255).astype(np.uint8)
+        #             else:
+        #                 print("Warning: Observation values out of expected range [0, 1] or [0, 255]. Clamping.")
+        #                 observation = np.clip(observation, 0, 255).astype(np.uint8)
+
+        #         # Convert numpy array to PIL Image
+        #         # PIL expects (height, width, channels), which matches your shape
+        #         img = Image.fromarray(observation, mode='RGB')
+
+        #         # Save as JPEG
+        #         img.save(filename, quality=95)  # quality=95 for good compression with minimal loss
+        #         print(f"Saved observation as {filename}")
+        # except Exception as e:
+        #     print(f"Error saving observation as JPEG: {e}")
+
+        #shilpa dist
+        curr_vel = np.sqrt(self.vel_x**2 + self.vel_y**2 + self.vel_z**2)
+        dist = (self.last_vel + curr_vel)/2.0 * (1/60.0)
+
         info = {
             "pos": (self.x, self.y, self.z),
             "cte": self.cte,
@@ -526,6 +578,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "lap_count": self.lap_count,
             "throttle": self.last_throttle,
             "steer": self.last_steer,
+            #shilpa dist
+            "distance": dist,
         }
 
         # Add the second image to the dict

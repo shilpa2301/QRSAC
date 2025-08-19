@@ -1,1 +1,3 @@
 python qrsac.py --config configs/qrsac-normal-iqn-neutral/donkeycar.yaml --gpu 0 --seed 0
+
+distance calc = avg vel * num steps * (1/fps)

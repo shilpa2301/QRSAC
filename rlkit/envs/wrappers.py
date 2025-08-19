@@ -193,7 +193,9 @@ class CustomInfoEnv(Wrapper):
                 "BipedalWalker-v3",
                 "BipedalWalkerHardcore-v3",
             "donkey-generated-roads-v0",
-            "jetracer_env"
+            "jetracer_env",
+            "donkey-roboracingleague-track-v0",
+            "donkey-generated-track-v0"
         ]:
             self.env_type = "box2d"
 
@@ -222,7 +224,8 @@ class CustomInfoEnv(Wrapper):
                         #    'angle': info['car'] #roll, pitch, yaw
                             'accel': float(np.sqrt(b[0]**2 + b[1]**2 + b[2]**2)),
                             'action_throttle': float(info['throttle']),
-                            'action_steer': float(info['steer'])
+                            'action_steer': float(info['steer']),
+                            'distance': float(info['distance'])
                            }
 
 
