@@ -182,6 +182,7 @@ if __name__ == "__main__":
 
 
     #JETRACER
+    # register(id="jetracer_env", entry_point="rlkit.envs.jetracer.model_car_env:ModelCar")
     # ctrl = XboxController()
     # print("TELEOPERATION READY")
     #
