@@ -1,3 +1,11 @@
 python qrsac.py --config configs/qrsac-normal-iqn-neutral/donkeycar.yaml --gpu 0 --seed 0
 
+./run_qrsac.sh
+
+
+
+
+
 distance calc = avg vel * num steps * (1/fps)
+
+track distance = 80 mts in donkey generated roads

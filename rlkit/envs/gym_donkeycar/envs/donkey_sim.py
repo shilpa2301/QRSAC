@@ -180,7 +180,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.last_vel = 0.0
 
         #shilpa
-        ae_path= "/home/smukh039/work/QRSAC/ae/model_pkls/icra_donkey_track_ae_model.pkl" #icra_generated_roads_ae_model.pkl"
+        ae_path= "/home/smukh039/work/QRSAC/ae/model_pkls/icra_generated_roads_ae_model.pkl"
+        # ae_path= "/home/smukh039/work/QRSAC/ae/model_pkls/icra_donkey_track_ae_model.pkl" 
         self.ae = load_ae(ae_path)
 
     def on_connect(self, client: SimClient) -> None:
@@ -688,7 +689,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # print("stability_reward=", stability_reward)
         # print("velocity_reward=", velocity_reward)
         # print()
-        w_1 = 5.0 #1.0 #1.0 #5.0 #5.0
+        w_1 = 1.0 #1.0 #1.0 #5.0 #5.0
         w_2 = 1.0 #1.0 #1.0 #1.0
         w_3 = 1.0 #1.0 #1.0 #1.0
 

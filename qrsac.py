@@ -58,37 +58,37 @@ def experiment(variant):
         input_size=obs_dim + action_dim,
         output_size=1,
         num_quantiles=num_quantiles,
-        hidden_sizes=[M, M, M],#, M, M],
+        hidden_sizes=[M, M, M, M, M],
     )
     zf2 = QuantileMlp(
         input_size=obs_dim + action_dim,
         output_size=1,
         num_quantiles=num_quantiles,
-        hidden_sizes=[M, M, M],#, M, M],
+        hidden_sizes=[M, M, M, M, M],
     )
     target_zf1 = QuantileMlp(
         input_size=obs_dim + action_dim,
         output_size=1,
         num_quantiles=num_quantiles,
-        hidden_sizes=[M, M, M],# M, M],
+        hidden_sizes=[M, M, M, M, M],
     )
     target_zf2 = QuantileMlp(
         input_size=obs_dim + action_dim,
         output_size=1,
         num_quantiles=num_quantiles,
-        hidden_sizes=[M, M, M],#, M, M],
+        hidden_sizes=[M, M, M, M, M],
     )
     policy = TanhGaussianPolicy(
         obs_dim=obs_dim,
         action_dim=action_dim,
-        hidden_sizes=[M, M, M],#, M, M],
+        hidden_sizes=[M, M, M, M, M],
         dropout_probability = 0.1,
     )
 
     target_policy = TanhGaussianPolicy(
         obs_dim=obs_dim,
         action_dim=action_dim,
-        hidden_sizes=[M, M, M],#, M, M],
+        hidden_sizes=[M, M, M, M, M],
         dropout_probability=0.1,
     )
 
@@ -168,10 +168,10 @@ if __name__ == "__main__":
     set_seed(args.seed)
 
     #shilpa
-    # register(id="donkey-generated-roads-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:GeneratedRoadsEnv")
+    register(id="donkey-generated-roads-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:GeneratedRoadsEnv")
     # register(id="donkey-warehouse-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:WarehouseEnv")
     # register(id="donkey-avc-sparkfun-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:AvcSparkfunEnv")
-    register(id="donkey-generated-track-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:GeneratedTrackEnv")
+    # register(id="donkey-generated-track-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:GeneratedTrackEnv")
     # register(id="donkey-mountain-track-v0", entry_point="gym_donkeycar.envs.donkey_env:MountainTrackEnv")
     # register(id="donkey-roboracingleague-track-v0", entry_point="rlkit.envs.gym_donkeycar.envs.donkey_env:RoboRacingLeagueTrackEnv")
     # register(id="donkey-waveshare-v0", entry_point="gym_donkeycar.envs.donkey_env:WaveshareEnv")

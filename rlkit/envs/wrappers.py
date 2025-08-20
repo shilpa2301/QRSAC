@@ -220,9 +220,9 @@ class CustomInfoEnv(Wrapper):
             custom_info = {'failed': reward <= -100,
                            'cte': info['cte'],
                            'vel': float(np.sqrt(a[0]**2 + a[1]**2 + a[2]**2)), #info['vel'], #vel_x, vel_y, vel_z                           
-                           'speed': info['speed'],
+                        #    'speed': info['speed'],
                         #    'angle': info['car'] #roll, pitch, yaw
-                            'accel': float(np.sqrt(b[0]**2 + b[1]**2 + b[2]**2)),
+                            # 'accel': float(np.sqrt(b[0]**2 + b[1]**2 + b[2]**2)),
                             'action_throttle': float(info['throttle']),
                             'action_steer': float(info['steer']),
                             'distance': float(info['distance'])
