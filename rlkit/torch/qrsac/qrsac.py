@@ -185,7 +185,7 @@ class QRSACTrainer(TorchTrainer):
         """
         Update Alpha
         """
-
+        
         new_actions_at_nstep, policy_mean_at_nstep, policy_log_std_at_nstep, log_pi_at_nstep, *_ = self.policy(
             obs_at_nstep,
             reparameterize=True,

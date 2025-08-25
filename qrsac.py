@@ -79,14 +79,14 @@ def experiment(variant):
         hidden_sizes=[M, M, M, M, M],
     )
     policy = TanhGaussianPolicy(
-        obs_dim=obs_dim,
+        obs_dim=obs_dim , #+ action_dim,
         action_dim=action_dim,
         hidden_sizes=[M, M, M, M, M],
         dropout_probability = 0.1,
     )
 
     target_policy = TanhGaussianPolicy(
-        obs_dim=obs_dim,
+        obs_dim=obs_dim ,#+ action_dim,
         action_dim=action_dim,
         hidden_sizes=[M, M, M, M, M],
         dropout_probability=0.1,

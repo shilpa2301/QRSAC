@@ -25,13 +25,13 @@ from rlkit.envs.gym_donkeycar.envs.donkey_env import (
 
 
 
-with open('/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/qrsac_donkey-generated-roads_normal-iqn-neutral_2025_08_12_14_45_30_0000--s-0/itr_30.pkl', 'rb') as f:
+with open('/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/qrsac_donkey-generated-roads_normal-iqn-neutral_2025_08_21_22_50_27_0000--s-0_final1/itr_995.pkl', 'rb') as f:
     state_dict = torch.load(f)
 
 target_policy = TanhGaussianPolicy(
             obs_dim=32,
             action_dim=2,
-            hidden_sizes=[256, 256, 256],#, 256, 256],
+            hidden_sizes=[256, 256, 256, 256, 256],
             dropout_probability=0.1,
             )
 

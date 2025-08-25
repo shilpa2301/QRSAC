@@ -645,7 +645,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
             return REWARD_CRASH - CRASH_SPEED_WEIGHT * norm_throttle
         # 1 per timesteps + throttle
         throttle_reward = THROTTLE_REWARD_WEIGHT * ((self.last_throttle - MIN_THROTTLE) / (MAX_THROTTLE - MIN_THROTTLE)) #(self.last_throttle / MAX_THROTTLE)
-        lane_keeping_reward = 1 + throttle_reward
+        lane_keeping_reward = 1.0 + throttle_reward
         # print("1+throttle rew=", lane_keeping_reward)
         # lane_keeping_reward =1 + throttle_reward + (1.0 - (math.fabs(self.cte) / self.max_cte)) # self.speed
         # print("lane keeping rew=", lane_keeping_reward)
@@ -689,7 +689,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # print("stability_reward=", stability_reward)
         # print("velocity_reward=", velocity_reward)
         # print()
-        w_1 = 1.0 #1.0 #1.0 #5.0 #5.0
+        w_1 = 5.0 #1.0 #1.0 #5.0 #5.0
         w_2 = 1.0 #1.0 #1.0 #1.0
         w_3 = 1.0 #1.0 #1.0 #1.0
 

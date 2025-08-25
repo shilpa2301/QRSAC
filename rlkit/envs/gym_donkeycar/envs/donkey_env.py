@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 def supply_defaults(conf: Dict[str, Any]) -> None:
     defaults = [
         ("start_delay", 5.0),
-        ("max_cte", 3.0),
+        ("max_cte", 5.0),
         ("frame_skip", 1),
         ("cam_resolution", (120, 160, 3)),
         ("log_level", logging.INFO),
@@ -128,6 +128,7 @@ class DonkeyEnv(gym.Env):
 
         # wait until the car is loaded in the scene
         self.viewer.wait_until_loaded()
+
 
         # shilpa
         # load_path = "/home/pistar/Shilpa/pipelines/pipeline2/aae-train-donkeycar/logs/ae-32_1704492161_best.pkl"

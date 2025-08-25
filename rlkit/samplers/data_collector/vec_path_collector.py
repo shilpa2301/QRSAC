@@ -44,6 +44,8 @@ class VecMdpPathCollector(DataCollector):
         # ae_path = "/home/pipelines/pipeline2/aae-train-donkeycar/logs/ae-32_1704492161_best.pkl"
         # self.ae = load_ae(ae_path)
         # self.device = device
+        #shilpa policy with action
+        # self.prev_actions = None
 
     def get_epoch_paths(self):
         return self._epoch_paths
@@ -82,8 +84,16 @@ class VecMdpPathCollector(DataCollector):
 
         num_paths_collected = 0
         while num_paths_collected < num_paths:
+            #shilpa policy with action
+            # if self.prev_actions is None:
+            #     self.prev_actions = np.zeros((1, 1, 2))
+            # a = np.concatenate((self._obs, self.prev_actions), axis=2)
+            # actions = self._policy.get_actions(self._obs)
+            # #shilpa policy with action
+            # self.prev_actions = actions
 
             actions = self._policy.get_actions(self._obs)
+
             #JETRACER
             # actions = np.squeeze(actions, axis=1)
             #qrsac_adapt
