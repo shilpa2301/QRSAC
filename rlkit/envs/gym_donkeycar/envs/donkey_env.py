@@ -118,7 +118,7 @@ class DonkeyEnv(gym.Env):
         #shilpa IMAGE
         # self.observation_space = spaces.Box(0, self.VAL_PER_PIXEL, self.viewer.get_sensor_size(), dtype=np.uint8)
         # print("img size=", self.viewer.get_sensor_size())
-        self.observation_space = spaces.Box(-np.inf, np.inf, shape=(1, 32), dtype=np.float32)
+        self.observation_space = spaces.Box(-np.inf, np.inf, shape=(1, 33), dtype=np.float32)
 
         # simulation related variables.
         self.seed()

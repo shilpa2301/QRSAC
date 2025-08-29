@@ -178,6 +178,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.last_yaw = 0.0
         #shilpa distance
         self.last_vel = 0.0
+        #shilpa action in obs
 
         #shilpa
         ae_path= "/home/smukh039/work/QRSAC/ae/model_pkls/icra_generated_roads_ae_model.pkl"
@@ -590,6 +591,11 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # self.timer.on_frame()
         observation = self.ae.encode_from_raw_image(np.squeeze(np.array(observation)[:,:,::-1]))
 
+        #shilpa throttle in obs
+        a = np.array(self.last_throttle).reshape(1,1)
+        observation = np.concatenate((observation, a), axis=1)
+
+
         return observation, reward, done, info
 
     def is_game_over(self) -> bool:
@@ -633,9 +639,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # --------------------------------------------------------------
 
         #######################--DEMO----------------------------------
-        THROTTLE_REWARD_WEIGHT =  0.1 #10 #0.1
+        THROTTLE_REWARD_WEIGHT =  0.5 #0.1 #0.1 #10 #0.1
         CRASH_SPEED_WEIGHT = 5
-        REWARD_CRASH = -10
+        REWARD_CRASH = -100 #-10 #-10
         MAX_THROTTLE = self.throttle_max
         MIN_THROTTLE = self.throttle_min
         cte_cross_weight = -10

@@ -1,8 +1,8 @@
 algorithm_kwargs:
   batch_size: 256 
   max_path_length: 5000 #8000 
-  min_num_steps_before_training: 1500 #400 
-  num_epochs: 1500 #1000 
+  min_num_steps_before_training: 1200 #400 
+  num_epochs: 1000 #1000 
   num_eval_paths_per_epoch: 10
   num_expl_steps_per_train_loop: 1 
   num_trains_per_train_loop: 1 
