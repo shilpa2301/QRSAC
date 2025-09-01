@@ -25,11 +25,11 @@ from rlkit.envs.gym_donkeycar.envs.donkey_env import (
 
 
 
-with open('/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/qrsac_donkey-generated-roads_normal-iqn-neutral_2025_08_21_22_50_27_0000--s-0_final1/itr_995.pkl', 'rb') as f:
+with open('/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/qrsac_donkey-generated-roads_normal-iqn-neutral_2025_08_29_12_33_04_0000--s-0/itr_485.pkl', 'rb') as f:
     state_dict = torch.load(f)
 
 target_policy = TanhGaussianPolicy(
-            obs_dim=32,
+            obs_dim=34,
             action_dim=2,
             hidden_sizes=[256, 256, 256, 256, 256],
             dropout_probability=0.1,
@@ -38,7 +38,7 @@ target_policy = TanhGaussianPolicy(
 target_policy.load_state_dict(state_dict["trainer/target_policy"])
 target_policy.eval()
 #donkeycar
-ae_path = "/home/smukh039/work/QRSAC/ae/model_pkls/ae-32_1704492161_best.pkl"
+ae_path = "/home/smukh039/work/QRSAC/ae/model_pkls/icra_generated_roads_ae_model.pkl"
 ae = load_ae(ae_path)
 
 #shilpa
@@ -48,19 +48,25 @@ env = make_env('donkey-generated-roads-v0')
 env.seed(100)
 
 obs=env.reset()
+print (f"obs shape={obs.shape}")
 #donkeycar
 # obs = ae.encode_from_raw_image(np.squeeze(obs[:, :, ::-1]))
 
 return_ep=0
 step_count=0
 done = False
+
+# action = [0.0, 0.0]
 while done== False:
+    # obs = np.concatenate ((obs, action), axis=1)
     action = target_policy.get_actions(obs, True)
     # print(f"action = {action}")
     action=action.flatten()
+    # print(f"action = {action.shape}")
     state, reward, done, info = env.step(action)
     return_ep+=reward
     step_count+=1
+    obs = state
     #donkeycar
     # obs = ae.encode_from_raw_image(np.squeeze(state[:, :, ::-1]))
     env.render()

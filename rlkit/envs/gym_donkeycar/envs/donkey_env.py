@@ -66,7 +66,7 @@ class DonkeyEnv(gym.Env):
     STEER_LIMIT_LEFT: float = -0.5 #-1.0 #-0.5 # 0.5 works till 04-0.6 th , for th 0.8-> 1.0
     STEER_LIMIT_RIGHT: float = 0.5 #1.0 #0.5
     THROTTLE_MIN: float = 0.2 #0.2 #0.2 #0.0
-    THROTTLE_MAX: float = 0.6 #0.6#1.0 #0.6
+    THROTTLE_MAX: float = 1.0 #0.6 #0.6#1.0 #0.6
     VAL_PER_PIXEL: int = 255
 
 
@@ -118,7 +118,7 @@ class DonkeyEnv(gym.Env):
         #shilpa IMAGE
         # self.observation_space = spaces.Box(0, self.VAL_PER_PIXEL, self.viewer.get_sensor_size(), dtype=np.uint8)
         # print("img size=", self.viewer.get_sensor_size())
-        self.observation_space = spaces.Box(-np.inf, np.inf, shape=(1, 33), dtype=np.float32)
+        self.observation_space = spaces.Box(-np.inf, np.inf, shape=(1, 34), dtype=np.float32)
 
         # simulation related variables.
         self.seed()

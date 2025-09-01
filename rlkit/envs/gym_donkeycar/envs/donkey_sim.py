@@ -591,9 +591,12 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # self.timer.on_frame()
         observation = self.ae.encode_from_raw_image(np.squeeze(np.array(observation)[:,:,::-1]))
 
-        #shilpa throttle in obs
+        #shilpa action in obs
         a = np.array(self.last_throttle).reshape(1,1)
         observation = np.concatenate((observation, a), axis=1)
+        b = np.array(self.last_steer).reshape(1,1)
+        observation = np.concatenate((observation, b), axis=1)
+
 
 
         return observation, reward, done, info
@@ -645,25 +648,22 @@ class DonkeyUnitySimHandler(IMesgHandler):
         MAX_THROTTLE = self.throttle_max
         MIN_THROTTLE = self.throttle_min
         cte_cross_weight = -10
+        # if done:
+        #     # penalize the agent for getting off the road fast
+        #     norm_throttle = (self.last_throttle - MIN_THROTTLE) / (MAX_THROTTLE - MIN_THROTTLE)
+        #     return REWARD_CRASH - CRASH_SPEED_WEIGHT * norm_throttle
+        # # 1 per timesteps + throttle
+        # throttle_reward = THROTTLE_REWARD_WEIGHT * ((self.last_throttle - MIN_THROTTLE) / (MAX_THROTTLE - MIN_THROTTLE)) #(self.last_throttle / MAX_THROTTLE)
+        # lane_keeping_reward = 1.0 + throttle_reward
+
         if done:
             # penalize the agent for getting off the road fast
-            norm_throttle = (self.last_throttle - MIN_THROTTLE) / (MAX_THROTTLE - MIN_THROTTLE)
+            norm_throttle = self.speed 
             return REWARD_CRASH - CRASH_SPEED_WEIGHT * norm_throttle
         # 1 per timesteps + throttle
-        throttle_reward = THROTTLE_REWARD_WEIGHT * ((self.last_throttle - MIN_THROTTLE) / (MAX_THROTTLE - MIN_THROTTLE)) #(self.last_throttle / MAX_THROTTLE)
-        lane_keeping_reward = 1.0 + throttle_reward
-        # print("1+throttle rew=", lane_keeping_reward)
-        # lane_keeping_reward =1 + throttle_reward + (1.0 - (math.fabs(self.cte) / self.max_cte)) # self.speed
-        # print("lane keeping rew=", lane_keeping_reward)
-        # if math.fabs(self.cte) > self.max_cte:
-            # lane_keeping_reward += cte_cross_weight * (math.fabs(self.cte) -self.max_cte)
-            # print("diff in cte=", math.fabs(self.cte)- self.max_cte)
-        # print("accel=",self.accel_x, ",",self.accel_y)
-        # print("last_accel=", self.last_accel_x, ",", self.last_accel_y)
-        # print("accel diff=", np.sqrt((self.last_accel_x-self.accel_x)**2 + (self.last_accel_y-self.accel_y)**2 + (self.last_accel_z-self.accel_z)**2))
-        # print("angvel diff=", np.sqrt(
-        #     (self.last_gyro_x - self.gyro_x) ** 2 + (self.last_gyro_y - self.gyro_y) ** 2 + (
-        #         self.last_gyro_z - self.gyro_z) ** 2))
+        speed_reward = THROTTLE_REWARD_WEIGHT * self.speed  #(self.last_throttle / MAX_THROTTLE)
+        lane_keeping_reward = 1.0 + speed_reward
+       
         alpha = 1.0
         beta = 1.0 #1.0
         stability_reward = 0.0
@@ -695,10 +695,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # print("stability_reward=", stability_reward)
         # print("velocity_reward=", velocity_reward)
         # print()
-        w_1 = 5.0 #1.0 #1.0 #5.0 #5.0
-        w_2 = 1.0 #1.0 #1.0 #1.0
-        w_3 = 1.0 #1.0 #1.0 #1.0
-
+        w_1 = 5.0 
+        w_2 = 0.0 #1.0 
+        w_3 = 0.0 #1.0 
         total_reward = w_1 * lane_keeping_reward + w_2 * stability_reward + w_3 * velocity_reward
 
         ########################-------GTS--------------
