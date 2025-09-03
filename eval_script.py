@@ -29,7 +29,7 @@ from rlkit.envs.gym_donkeycar.envs.donkey_env import (
 
 
 
-with open('/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/qrsac_donkey-generated-roads_normal-iqn-neutral_2025_08_29_12_33_04_0000--s-0_final_1/itr_85.pkl', 'rb') as f:
+with open('/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/qrsac_donkey-generated-roads_normal-iqn-neutral_2025_08_31_16_11_16_0000--s-0_RC1_2/itr_85.pkl', 'rb') as f:
     state_dict = torch.load(f)
 
 target_policy = TanhGaussianPolicy(
@@ -59,7 +59,7 @@ print (f"obs shape={obs.shape}")
 # Set the evaluation time and date once before the loop
 eval_time_date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 # Define the CSV file path with eval_time_date in the filename
-csv_file_path = f"/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/data_log_{eval_time_date}_final1_85.csv"
+csv_file_path = f"/home/smukh039/work/QRSAC/data/qrsac-donkey-generated-roads-normal-iqn-neutral/data_log_{eval_time_date}_RC1_2_85.csv"
 # Write the header to the CSV file (excluding eval_time_date as a column)
 header = ["failed", "cte", "vel", "accel", "action_throttle", "action_steer", "distance"]
 
