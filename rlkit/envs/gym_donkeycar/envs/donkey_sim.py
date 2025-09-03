@@ -696,7 +696,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # print("velocity_reward=", velocity_reward)
         # print()
         w_1 = 5.0 
-        w_2 = 0.0 #1.0 
+        w_2 = 1.0 #1.0 
         w_3 = 0.0 #1.0 
         total_reward = w_1 * lane_keeping_reward + w_2 * stability_reward + w_3 * velocity_reward
 
