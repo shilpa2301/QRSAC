@@ -48,14 +48,19 @@ def smooth_data(data, window_size=5):
 
 # Function to plot steering differences with smoothing
 def plot_steering_diff(df1, df2, label1, label2, window_size=5):
+    # df1 = df1[400:-400].copy()
+    # df2 = df2[400:-400].copy()
+
+
     df1['steer_diff'] = df1['action_steer'].diff().fillna(0)
     df2['steer_diff'] = df2['action_steer'].diff().fillna(0)
-    df1['steer_diff_smooth'] = smooth_data(df1['steer_diff'], window_size)
-    df2['steer_diff_smooth'] = smooth_data(df2['steer_diff'], window_size)
+    df1['steer_diff_smooth'] = smooth_data(np.abs(df1['steer_diff']), window_size)
+    df2['steer_diff_smooth'] = smooth_data(np.abs(df2['steer_diff']), window_size)
     
     # Individual plot for File 1
     plt.figure(figsize=(10, 6))
-    plt.plot(df1.index, df1['steer_diff_smooth'], label=label1, color='blue')
+    plt.ylim([0, 0.025])
+    plt.plot(df1.index, np.abs(df1['steer_diff_smooth']), label=label1, color='blue')
     plt.title(f"Steering Difference (Smoothed) - {label1}")
     plt.xlabel("Frame (Row Number)")
     plt.ylabel("Steering Difference")
@@ -66,7 +71,8 @@ def plot_steering_diff(df1, df2, label1, label2, window_size=5):
     
     # Individual plot for File 2
     plt.figure(figsize=(10, 6))
-    plt.plot(df2.index, df2['steer_diff_smooth'], label=label2, color='red')
+    plt.ylim([0, 0.025])
+    plt.plot(df2.index, np.abs(df2['steer_diff_smooth']), label=label2, color='red')
     plt.title(f"Steering Difference (Smoothed) - {label2}")
     plt.xlabel("Frame (Row Number)")
     plt.ylabel("Steering Difference")
@@ -77,8 +83,9 @@ def plot_steering_diff(df1, df2, label1, label2, window_size=5):
     
     # Combined plot
     plt.figure(figsize=(10, 6))
-    plt.plot(df1.index, df1['steer_diff_smooth'], label=label1, color='blue')
-    plt.plot(df2.index, df2['steer_diff_smooth'], label=label2, color='red')
+    plt.ylim([0, 1.0])
+    plt.plot(df1.index, np.abs(df1['steer_diff_smooth']), label=label1, color='blue')
+    plt.plot(df2.index, np.abs(df2['steer_diff_smooth']), label=label2, color='red')
     plt.title("Steering Difference (Smoothed) - Both Files")
     plt.xlabel("Frame (Row Number)")
     plt.ylabel("Steering Difference")
@@ -174,8 +181,8 @@ def calculate_track_completion(df, label):
     return track_completion
 
 # Labels for the two files
-label1 = "File 1"
-label2 = "File 2"
+label1 = "Final Reward"
+label2 = "RC1"
 
 # Perform analysis for each file
 print("=== Analysis for File 1 ===")
@@ -191,7 +198,7 @@ calculate_mean_velocity(df2, label2)
 calculate_track_completion(df2, label2)
 
 # Generate and save smoothed plots with a window size of 5 (adjustable)
-window_size = 5
+window_size = 50
 plot_steering_diff(df1, df2, label1, label2, window_size)
 plot_throttle(df1, df2, label1, label2, window_size)
 plot_velocity(df1, df2, label1, label2, window_size)
