@@ -81,6 +81,12 @@ def calculate_mean_velocity(df):
     mean_vel = df['vel'].mean()
     return mean_vel
 
+# Function to calculate mean absolute steer change
+def calculate_mean_abs_steer_change(df):
+    df['steer_diff'] = df['action_steer'].diff().fillna(0)
+    mean_abs_steer_change = np.abs(df['steer_diff']).mean()
+    return mean_abs_steer_change
+
 # Function to smooth data using a moving average
 def smooth_data(data, window_size=5):
     return data.rolling(window=window_size, center=True).mean().fillna(data)
@@ -128,6 +134,7 @@ def process_and_plot_all_ranges(window_size=150, smoothing_window=70):
         percent_ctes = []
         mean_vels = []
         track_completions = []
+        mean_abs_steer_changes = []
         
         # Individual file analysis
         print(f"\n--- Individual File Analysis for {ep_range} ---")
@@ -151,6 +158,10 @@ def process_and_plot_all_ranges(window_size=150, smoothing_window=70):
             track_completion = calculate_track_completion(df)
             track_completions.append(track_completion)
             print(f"{label} - Percentage of Track Completed: {track_completion:.2f}%")
+
+            mean_abs_steer_change = calculate_mean_abs_steer_change(df)
+            mean_abs_steer_changes.append(mean_abs_steer_change)
+            print(f"{label} - Mean Absolute Steer Change: {mean_abs_steer_change:.4f}")
         
         # Calculate and print mean and std for the metrics across all files in this range
         print(f"\n--- Aggregated Metrics for {ep_range} (Mean ± Std across all files) ---")
@@ -160,6 +171,7 @@ def process_and_plot_all_ranges(window_size=150, smoothing_window=70):
         print(f"Percentage of time with CTE <= -1.0: {np.mean(percent_ctes):.2f}% ± {np.std(percent_ctes):.2f}%")
         print(f"Mean Velocity: {np.mean(mean_vels):.4f} ± {np.std(mean_vels):.4f}")
         print(f"Percentage of Track Completed: {np.mean(track_completions):.2f}% ± {np.std(track_completions):.2f}%")
+        print(f"Mean Absolute Steer Change: {np.mean(mean_abs_steer_changes):.4f} ± {np.std(mean_abs_steer_changes):.4f}")
         
         # Trim DataFrames for plotting (removing first 100 and last 100 rows)
         trimmed_dfs = {label: df[100:-100].copy() for label, df in dfs.items() if len(df) > 200}
@@ -168,100 +180,100 @@ def process_and_plot_all_ranges(window_size=150, smoothing_window=70):
             print(f"No data after trimming for {ep_range}. Skipping plots.")
             continue
         
-        # Process Steering Difference
-        steer_diff_data = []
-        for label, df in trimmed_dfs.items():
-            df['steer_diff'] = df['action_steer'].diff().fillna(0)
-            df['steer_diff_smooth'] = smooth_data(np.abs(df['steer_diff']), window_size)
-            steer_diff_data.append(df['steer_diff_smooth'].values)
+    #     # Process Steering Difference
+    #     steer_diff_data = []
+    #     for label, df in trimmed_dfs.items():
+    #         df['steer_diff'] = df['action_steer'].diff().fillna(0)
+    #         df['steer_diff_smooth'] = smooth_data(np.abs(df['steer_diff']), window_size)
+    #         steer_diff_data.append(df['steer_diff_smooth'].values)
         
-        if steer_diff_data:
-            min_length = min(len(run) for run in steer_diff_data)
-            steer_diff_data = [run[:min_length] for run in steer_diff_data]
-            steer_diff_array = np.array(steer_diff_data)
-            steer_diff_mean = np.mean(steer_diff_array, axis=0)
-            steer_diff_std = np.std(steer_diff_array, axis=0)
-            steer_diff_mean = smoothen(steer_diff_mean, smoothing_window)
-            steer_diff_std = smoothen(steer_diff_std, smoothing_window)
-            steer_diff_means_stds[ep_range] = (steer_diff_mean, steer_diff_std, min_length)
+    #     if steer_diff_data:
+    #         min_length = min(len(run) for run in steer_diff_data)
+    #         steer_diff_data = [run[:min_length] for run in steer_diff_data]
+    #         steer_diff_array = np.array(steer_diff_data)
+    #         steer_diff_mean = np.mean(steer_diff_array, axis=0)
+    #         steer_diff_std = np.std(steer_diff_array, axis=0)
+    #         steer_diff_mean = smoothen(steer_diff_mean, smoothing_window)
+    #         steer_diff_std = smoothen(steer_diff_std, smoothing_window)
+    #         steer_diff_means_stds[ep_range] = (steer_diff_mean, steer_diff_std, min_length)
         
-        # Process Throttle
-        throttle_data = []
-        for label, df in trimmed_dfs.items():
-            df['throttle_smooth'] = smooth_data(df['action_throttle'], window_size)
-            throttle_data.append(df['throttle_smooth'].values)
+    #     # Process Throttle
+    #     throttle_data = []
+    #     for label, df in trimmed_dfs.items():
+    #         df['throttle_smooth'] = smooth_data(df['action_throttle'], window_size)
+    #         throttle_data.append(df['throttle_smooth'].values)
         
-        if throttle_data:
-            min_length = min(len(run) for run in throttle_data)
-            throttle_data = [run[:min_length] for run in throttle_data]
-            throttle_array = np.array(throttle_data)
-            throttle_mean = np.mean(throttle_array, axis=0)
-            throttle_std = np.std(throttle_array, axis=0)
-            throttle_mean = smoothen(throttle_mean, smoothing_window)
-            throttle_std = smoothen(throttle_std, smoothing_window)
-            throttle_means_stds[ep_range] = (throttle_mean, throttle_std, min_length)
+    #     if throttle_data:
+    #         min_length = min(len(run) for run in throttle_data)
+    #         throttle_data = [run[:min_length] for run in throttle_data]
+    #         throttle_array = np.array(throttle_data)
+    #         throttle_mean = np.mean(throttle_array, axis=0)
+    #         throttle_std = np.std(throttle_array, axis=0)
+    #         throttle_mean = smoothen(throttle_mean, smoothing_window)
+    #         throttle_std = smoothen(throttle_std, smoothing_window)
+    #         throttle_means_stds[ep_range] = (throttle_mean, throttle_std, min_length)
         
-        # Process Velocity
-        velocity_data = []
-        for label, df in trimmed_dfs.items():
-            df['vel_smooth'] = smooth_data(df['vel'], window_size)
-            velocity_data.append(df['vel_smooth'].values)
+    #     # Process Velocity
+    #     velocity_data = []
+    #     for label, df in trimmed_dfs.items():
+    #         df['vel_smooth'] = smooth_data(df['vel'], window_size)
+    #         velocity_data.append(df['vel_smooth'].values)
         
-        if velocity_data:
-            min_length = min(len(run) for run in velocity_data)
-            velocity_data = [run[:min_length] for run in velocity_data]
-            velocity_array = np.array(velocity_data)
-            velocity_mean = np.mean(velocity_array, axis=0)
-            velocity_std = np.std(velocity_array, axis=0)
-            velocity_mean = smoothen(velocity_mean, smoothing_window)
-            velocity_std = smoothen(velocity_std, smoothing_window)
-            velocity_means_stds[ep_range] = (velocity_mean, velocity_std, min_length)
+    #     if velocity_data:
+    #         min_length = min(len(run) for run in velocity_data)
+    #         velocity_data = [run[:min_length] for run in velocity_data]
+    #         velocity_array = np.array(velocity_data)
+    #         velocity_mean = np.mean(velocity_array, axis=0)
+    #         velocity_std = np.std(velocity_array, axis=0)
+    #         velocity_mean = smoothen(velocity_mean, smoothing_window)
+    #         velocity_std = smoothen(velocity_std, smoothing_window)
+    #         velocity_means_stds[ep_range] = (velocity_mean, velocity_std, min_length)
     
-    # Plot combined Steering Difference for all ranges
-    plt.figure(figsize=(10, 6))
-    plt.ylim([0, 0.3])
-    for (ep_range, (mean_data, std_data, min_length)), color in zip(steer_diff_means_stds.items(), colors):
-        xs = np.arange(len(mean_data))
-        plt.plot(xs, mean_data, label=ep_range, color=color, linewidth=2)
-        plt.fill_between(xs, mean_data - std_data, mean_data + std_data, color=color, alpha=0.15)
-    plt.title("Steering Difference (Policy Evolution during Training)")
-    plt.xlabel("Step")
-    plt.ylabel("Steering Difference")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(plot_dir, "steering_policy_evolution.png"))
-    plt.close()
+    # # Plot combined Steering Difference for all ranges
+    # plt.figure(figsize=(10, 6))
+    # plt.ylim([0, 0.3])
+    # for (ep_range, (mean_data, std_data, min_length)), color in zip(steer_diff_means_stds.items(), colors):
+    #     xs = np.arange(len(mean_data))
+    #     plt.plot(xs, mean_data, label=ep_range, color=color, linewidth=2)
+    #     plt.fill_between(xs, mean_data - std_data, mean_data + std_data, color=color, alpha=0.15)
+    # plt.title("Steering Difference (Policy Evolution during Training)")
+    # plt.xlabel("Step")
+    # plt.ylabel("Steering Difference")
+    # plt.legend()
+    # plt.grid(True)
+    # plt.tight_layout()
+    # plt.savefig(os.path.join(plot_dir, "steering_policy_evolution.png"))
+    # plt.close()
     
-    # Plot combined Throttle for all ranges
-    plt.figure(figsize=(10, 6))
-    for (ep_range, (mean_data, std_data, min_length)), color in zip(throttle_means_stds.items(), colors):
-        xs = np.arange(len(mean_data))
-        plt.plot(xs, mean_data, label=ep_range, color=color, linewidth=2)
-        plt.fill_between(xs, mean_data - std_data, mean_data + std_data, color=color, alpha=0.15)
-    plt.title("Throttle (Policy Evolution during Training)")
-    plt.xlabel("Step")
-    plt.ylabel("Throttle")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(plot_dir, "throttle_policy_evolution.png"))
-    plt.close()
+    # # Plot combined Throttle for all ranges
+    # plt.figure(figsize=(10, 6))
+    # for (ep_range, (mean_data, std_data, min_length)), color in zip(throttle_means_stds.items(), colors):
+    #     xs = np.arange(len(mean_data))
+    #     plt.plot(xs, mean_data, label=ep_range, color=color, linewidth=2)
+    #     plt.fill_between(xs, mean_data - std_data, mean_data + std_data, color=color, alpha=0.15)
+    # plt.title("Throttle (Policy Evolution during Training)")
+    # plt.xlabel("Step")
+    # plt.ylabel("Throttle")
+    # plt.legend()
+    # plt.grid(True)
+    # plt.tight_layout()
+    # plt.savefig(os.path.join(plot_dir, "throttle_policy_evolution.png"))
+    # plt.close()
     
-    # Plot combined Velocity for all ranges
-    plt.figure(figsize=(10, 6))
-    for (ep_range, (mean_data, std_data, min_length)), color in zip(velocity_means_stds.items(), colors):
-        xs = np.arange(len(mean_data))
-        plt.plot(xs, mean_data, label=ep_range, color=color, linewidth=2)
-        plt.fill_between(xs, mean_data - std_data, mean_data + std_data, color=color, alpha=0.15)
-    plt.title("Velocity (Policy Evolution during Training)")
-    plt.xlabel("Step")
-    plt.ylabel("Velocity")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(plot_dir, "velocity_policy_evolution.png"))
-    plt.close()
+    # # Plot combined Velocity for all ranges
+    # plt.figure(figsize=(10, 6))
+    # for (ep_range, (mean_data, std_data, min_length)), color in zip(velocity_means_stds.items(), colors):
+    #     xs = np.arange(len(mean_data))
+    #     plt.plot(xs, mean_data, label=ep_range, color=color, linewidth=2)
+    #     plt.fill_between(xs, mean_data - std_data, mean_data + std_data, color=color, alpha=0.15)
+    # plt.title("Velocity (Policy Evolution during Training)")
+    # plt.xlabel("Step")
+    # plt.ylabel("Velocity")
+    # plt.legend()
+    # plt.grid(True)
+    # plt.tight_layout()
+    # plt.savefig(os.path.join(plot_dir, "velocity_policy_evolution.png"))
+    # plt.close()
 
 # Process and plot for all ranges
 process_and_plot_all_ranges()
