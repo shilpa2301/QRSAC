@@ -8,13 +8,13 @@
             "name": "Python: QRSAC",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/eval_script.py", //qrsac.py",
+            "program": "${workspaceFolder}/sac.py", //eval_script.py", //qrsac.py",
             // "program": "${workspaceFolder}/eval_script.py",
             "args": [
                 //cobevt
-                // "--config", "${workspaceFolder}/configs/qrsac-normal-iqn-neutral/donkeycar.yaml",
-                // "--gpu", "0",
-                // "--seed", "0"
+                "--config", "${workspaceFolder}/configs/sac-normal/donkeycar.yaml", //qrsac-normal-iqn-neutral/donkeycar.yaml",
+                "--gpu", "0",
+                "--seed", "0"
             ],
             "cwd": "${workspaceFolder}",
             "env": {

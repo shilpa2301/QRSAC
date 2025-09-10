@@ -14,6 +14,7 @@ class VecOnlineRLAlgorithm(BaseRLAlgorithm, metaclass=abc.ABCMeta):
             trainer,
             exploration_env,
             evaluation_env,
+            #shilpa QRSAC
             exploration_data_collector: VecMdpStepCollector,
             evaluation_data_collector: VecMdpPathCollector,
             replay_buffer: TorchReplayBuffer,
@@ -49,9 +50,9 @@ class VecOnlineRLAlgorithm(BaseRLAlgorithm, metaclass=abc.ABCMeta):
     def _train(self):
         self.training_mode(False)
         if self.min_num_steps_before_training > 0:
-            print(self.min_num_steps_before_training)
-           
+            # shilpa
             print("exploring")
+
             init_expl_paths = self.expl_data_collector.collect_new_steps(
                 self.max_path_length,
                 self.min_num_steps_before_training // self.expl_env.env_num,
@@ -67,24 +68,26 @@ class VecOnlineRLAlgorithm(BaseRLAlgorithm, metaclass=abc.ABCMeta):
 
         train_data = self.replay_buffer.next_batch(self.batch_size)
 
-        #QRSAC
+        #shilpa QRSAC
         self.expl_data_collector.reset_after_expl()
 
         for epoch in gt.timed_for(
                 range(self._start_epoch, self.num_epochs),
                 save_itrs=True,
         ):
-            #QRSAC
+            #shilpa QRSAC
             print("epoch=", epoch)
             for _ in range(self.num_train_loops_per_epoch):
                 for _ in range(self.num_expl_steps_per_train_loop // self.expl_env.env_num):
-                    # QRSAC
+                    # shilpa QRSAC
 
-                    print("Training in epoch=", epoch)
+
                     self.training_mode(True)
                     for _ in range(num_trains_per_expl_step):
-                        # QRSAC
-                        self.trainer.train(train_data, self.replay_buffer)
+                        # shilpa DSAC
+                        self.trainer.train(train_data)
+                        # shilpa QRSAC
+                        # self.trainer.train(train_data, self.replay_buffer)
                         gt.stamp('training', unique=False)
                         train_data = self.replay_buffer.next_batch(self.batch_size)
                         gt.stamp('data sampling', unique=False)
@@ -93,15 +96,42 @@ class VecOnlineRLAlgorithm(BaseRLAlgorithm, metaclass=abc.ABCMeta):
                     print("Collecting path in epoch=", epoch)
                     new_expl_steps = self.eval_data_collector.collect_new_paths(
                         self.max_path_length,
-                        1,  # num steps
+                        1,  # num paths
                         discard_incomplete_paths=False,
                     )
+                    # gt.stamp('evaluation sampling')
+
+
+                    # new_expl_steps = self.expl_data_collector.collect_new_steps(
+                    #     self.max_path_length,
+                    #     1,  # num steps
+                    #     discard_incomplete_paths=False,
+                    # )
                     gt.stamp('exploration sampling', unique=False)
                     self.replay_buffer.add_paths(new_expl_steps)
                     gt.stamp('data storing', unique=False)
 
-                    
+                    #shilpa
+                    # print("getting trained")
+                    # self.training_mode(True)
+                    # for _ in range(num_trains_per_expl_step):
+                    #     #shilpa DSAC
+                    #     # self.trainer.train(train_data)
+                    #     #shilpa QRSAC
+                    #     self.trainer.train(train_data, self.replay_buffer)
+                    #     gt.stamp('training', unique=False)
+                    #     train_data = self.replay_buffer.next_batch(self.batch_size)
+                    #     gt.stamp('data sampling', unique=False)
+                    # self.training_mode(False)
 
+            #shilpa
+            # print(" TRAINING- Evaluation")
+            # temp_path = self.eval_data_collector.collect_new_paths(
+            #     self.max_path_length,
+            #     self.num_eval_paths_per_epoch,
+            #     discard_incomplete_paths=True,
+            # )
+            # gt.stamp('evaluation sampling')
             self._end_epoch(epoch)
 
     def _get_snapshot(self):
@@ -140,14 +170,14 @@ class VecOnlineRLAlgorithm(BaseRLAlgorithm, metaclass=abc.ABCMeta):
         """
         logger.record_dict(
             self.eval_data_collector.get_diagnostics(),
-            #QRSAC
+            #shilpa QRSAC
             prefix='training/',
             # prefix='evaluation/',
         )
         eval_paths = self.eval_data_collector.get_epoch_paths()
         logger.record_dict(
             eval_util.get_generic_path_information(eval_paths),
-            # QRSAC
+            # shilpa QRSAC
             prefix='training/',
             # prefix='evaluation/',
         )

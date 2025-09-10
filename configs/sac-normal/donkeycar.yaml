@@ -1,0 +1,25 @@
+algorithm_kwargs:
+  batch_size: 256 
+  max_path_length: 5000 #8000 
+  min_num_steps_before_training: 1200 #400 
+  num_epochs: 500 #1000 #1000 
+  num_eval_paths_per_epoch: 10
+  num_expl_steps_per_train_loop: 1 
+  num_trains_per_train_loop: 5 #1 
+env: donkey-generated-roads-v0 #donkey-generated-track-v0 #donkey-roboracingleague-track-v0 
+eval_env_num: 1 
+expl_env_num: 1 
+layer_size: 256 
+#num_quantiles: 32
+replay_buffer_size: 100000 #ASSUMPTION 2 : supplement says 10e+6 and paper says 10e+7
+trainer_kwargs:
+  alpha: 0.1 
+  discount: 0.99 
+  policy_lr: 0.0003
+  qf_lr: 0.0003 
+  soft_target_tau: 0.005 
+  #tau_type: fix 
+  target_update_period: 5 #1
+  use_automatic_entropy_tuning: false
+  #zf_lr: 0.0003 
+version: normal

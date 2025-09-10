@@ -48,10 +48,15 @@ class TorchTrainer(Trainer, metaclass=abc.ABCMeta):
     def __init__(self):
         self._num_train_steps = 0
 
+    #shilpa DSAC
+    def train(self, batch):
+       self._num_train_steps += 1
+       self.train_from_torch(batch)
 
-    def train(self, batch, replay_buffer):
-        self._num_train_steps += 1
-        self.train_from_torch(batch, replay_buffer)
+    #shilpa QRSAC
+    # def train(self, batch, replay_buffer):
+    #     self._num_train_steps += 1
+    #     self.train_from_torch(batch, replay_buffer)
 #
 
     def get_diagnostics(self):
